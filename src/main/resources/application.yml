@@ -1,0 +1,45 @@
+server:
+  servlet:
+    context-path: /tirage
+
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    hikari:
+      connection-timeout: 60000
+      idle-timeout: 60000
+      leak-detection-threshold: 60000
+      max-lifetime: 60000
+    password: sa
+    url: jdbc:h2:./data/tiragedb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS LAGRANGE;MV_STORE=false
+    username: sa
+    platform: h2
+  h2:
+    console:
+      enabled: true
+  jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_schema: LAGRANGE
+        dialect: org.hibernate.dialect.H2Dialect
+        enable_lazy_load_no_trans: true
+    show-sql: true
+
+logging:
+  level:
+    org:
+      springframework: INFO
+
+management:
+  health:
+    livenessState:
+      enabled: true
+    probes:
+      enabled: true
+    readinessState:
+      enabled: true
