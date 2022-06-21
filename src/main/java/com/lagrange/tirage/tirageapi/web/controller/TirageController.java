@@ -143,7 +143,7 @@ public class TirageController {
         return new ResponseEntity<>(notifyUserResponse,HttpStatus.OK);
     }
 
-    @GetMapping(value = "/verifycompany/{company}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/verifycompany/{company}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity verifyCompany(@PathVariable("company") String company) throws Exception {
         log.info("verifing if the company ' "+company +"' exist");
         boolean companyAlreadyExist = tirageCoreService.verifyCompanyAlreadyExist(company);
