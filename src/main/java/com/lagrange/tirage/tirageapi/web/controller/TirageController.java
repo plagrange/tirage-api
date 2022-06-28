@@ -2,6 +2,7 @@ package com.lagrange.tirage.tirageapi.web.controller;
 
 import com.lagrange.tirage.tirageapi.model.*;
 import com.lagrange.tirage.tirageapi.services.interfaces.ITirageCoreService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,14 +17,16 @@ import java.util.List;
 
 @RestController
 @Validated
+
 @Slf4j
 public class TirageController {
 
     @Autowired
     private ITirageCoreService tirageCoreService;
 
+    @SneakyThrows
     @PostMapping(value = "/create-tirage",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CreateTirageResponse> createTirage(@RequestBody @Valid CreateTirageRequest createTirageRequest){
+    public ResponseEntity<CreateTirageResponse> createTirage(@RequestBody @Valid CreateTirageRequest createTirageRequest)  {
         log.info("create a new tirage with resource : " + createTirageRequest.toString());
 
         if(createTirageRequest.getCompany()==null || createTirageRequest.getCompany().length()==0 || createTirageRequest.getUsers()==null || createTirageRequest.getUsers().size()==0){
@@ -31,13 +34,13 @@ public class TirageController {
                     HttpStatus.NOT_FOUND, "Bad user parameter");
         }
         List<UserResponse> userList = null;
-        try {
+//        try {
             userList = tirageCoreService.initListParticipant(createTirageRequest);
-        } catch (Exception e) {
-            log.error("Failed to create new tirage", e);
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Bad user parameter");
-        }
+//        } catch (Exception e) {
+//            log.error("Failed to create new tirage", e);
+//            throw new ResponseStatusException(
+//                    HttpStatus.BAD_REQUEST, "Bad user parameter");
+//        }
         CreateTirageResponse createTirageResponse = CreateTirageResponse.builder()
                 .userResponses(userList)
                 .company(createTirageRequest.getCompany())
@@ -79,13 +82,8 @@ public class TirageController {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "secure code not matching");
         }
-
         List<UserTirageResponse> resultList = tirageCoreService.getResultList(adminresource.getCompany());
-        TirageResponses tirageResponses = TirageResponses.builder()
-                .tirageResponseList(resultList)
-                .company(adminresource.getCompany())
-                .build();
-
+        TirageResponses tirageResponses = TirageResponses.of(resultList, adminresource.getCompany());
         log.info("retrieving results of tirage for company : " + adminresource.getCompany() + " end with success.  result list is : " + tirageResponses);
         return new ResponseEntity<>(tirageResponses,HttpStatus.OK);
     }
@@ -147,7 +145,7 @@ public class TirageController {
     public ResponseEntity verifyCompany(@PathVariable("company") String company) throws Exception {
         log.info("verifing if the company ' "+company +"' exist");
         boolean companyAlreadyExist = tirageCoreService.verifyCompanyAlreadyExist(company);
-        CompanyExisted companyExisted = CompanyExisted.builder().isCompanyExisted(companyAlreadyExist).build();
+        CompanyExisted companyExisted = CompanyExisted.of(companyAlreadyExist);
         log.info("verifing if the company ' "+company +"' exist end with success and result : "+ companyExisted);
         return new ResponseEntity<>(companyExisted,HttpStatus.OK);
     }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.lagrange.tirage.tirageapi.model;
 
 import lombok.AllArgsConstructor;
@@ -14,17 +11,12 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-//@AllArgsConstructor(staticName = "of")
+@AllArgsConstructor(staticName = "of")
 @Builder
 public class UserTirageResponse{
 
     private String email;
 	private String company;
 	private int orderNumber;
-	public UserTirageResponse(String email, String company, int orderNumber){
-		this.email = email;
-		this.company = company;
-		this.orderNumber = orderNumber;
-	}
 
 }

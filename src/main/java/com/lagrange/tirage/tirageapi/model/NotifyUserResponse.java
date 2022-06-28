@@ -21,6 +21,5 @@ public class NotifyUserResponse {
 	private String email;
 	private String company;
 	private boolean isNotificationSend;
-	private String error; 
-	
+
 }

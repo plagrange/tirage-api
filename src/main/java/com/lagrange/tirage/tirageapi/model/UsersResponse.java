@@ -20,9 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Builder
-public class UsersResponse implements Serializable{
+public class UsersResponse{
 	
-    private static final long serialVersionUID = -2326501517825606290L;
 	private List<UserResource> userResponseList = new ArrayList<>();
 	private String company;
 	private String message;

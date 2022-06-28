@@ -77,7 +77,7 @@ public class MailService {
                 + company + "/" + to + " \nVotre code de sécurité pour le tirage est : " + criteria
                 + " \n Bonne Change et a bientot \n \n Dr Ing Col Cpt Lagrange";
 
-        try {
+//        try {
             message.setText(texte);
             message.setFrom(new InternetAddress(username));
             message.setSubject("Tirage au sort");
@@ -92,20 +92,19 @@ public class MailService {
                 transport.sendMessage(message, new Address[] { new InternetAddress(to) });
 
             } catch (MessagingException e) {
-                e.printStackTrace();
-                throw e;
+                log.warn("Was not able to notify user :" + to, e);
             } finally {
                 try {
                     if (transport != null) {
                         transport.close();
                     }
                 } catch (MessagingException e) {
-                    e.printStackTrace();
+                    log.warn("Was not able to notify user :" + to, e);
                 }
             }
-        } catch (MessagingException e) {
-            throw e;
-        }
+//        } catch (MessagingException e) {
+//            throw e;
+//        }
 
     }
 }
