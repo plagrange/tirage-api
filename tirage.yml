@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tirage-app
+  labels:
+    app: tirage-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: tirage-app
+  template:
+    metadata:
+      labels:
+        app: tirage-app
+    spec:
+      containers:
+      - name: tirage
+        image: tirage:v1

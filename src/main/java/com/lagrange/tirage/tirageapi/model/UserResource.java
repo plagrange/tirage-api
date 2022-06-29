@@ -1,12 +1,8 @@
-/**
- * 
- */
 package com.lagrange.tirage.tirageapi.model;
 
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author pmekeze
@@ -14,7 +10,6 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor(staticName = "of")
 @Builder
 public class UserResource implements Serializable{
 
@@ -22,6 +17,11 @@ public class UserResource implements Serializable{
 	private String secureCode;
 	private boolean admin = false;
 
+	public UserResource(String email, String secureCode, boolean admin){
+		this.email = email;
+		this.secureCode = secureCode;
+		this.admin = admin;
+	}
 	public String toString(){
 		return "User email = " + this.email + ", secureCode = " + this.secureCode + "isAdmin = "+ this .admin;
 	}
