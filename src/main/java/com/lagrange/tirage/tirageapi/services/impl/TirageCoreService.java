@@ -226,6 +226,11 @@ public class TirageCoreService implements ITirageCoreService {
         return tirageParameterByCompany.isPresent();
     }
 
+    public List<String> getListExistedCompany() {
+        Optional<List<String>> optionalCompanies = parameterRepository.findCompanies();
+        return optionalCompanies.get();
+    }
+
     private List<UserResponse> sendMailToUsers(List<UserResource> allUser, String company) {
         List<UserResponse> resultList = new ArrayList<UserResponse>();
         MailService instance = MailService.getInstance();

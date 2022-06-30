@@ -14,4 +14,5 @@ public interface ITirageCoreService {
     List<UserResource> getListParticipantFromDB(String company);
     NotifyUserResponse notifyUser(NotifyUserResource userResource) throws Exception;
     boolean verifyCompanyAlreadyExist(String company) throws Exception;
+    List<String> getListExistedCompany() throws Exception;
 }

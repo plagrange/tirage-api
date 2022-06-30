@@ -149,4 +149,12 @@ public class TirageController {
         log.info("verifing if the company ' "+company +"' exist end with success and result : "+ companyExisted);
         return new ResponseEntity<>(companyExisted,HttpStatus.OK);
     }
+
+    @GetMapping(value = "/companies",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getCompanies() throws Exception {
+        log.info("enterring get list existed companies");
+        List<String> listExistedCompany = tirageCoreService.getListExistedCompany();
+        log.info("exiting get list existed companies");
+        return new ResponseEntity<>(listExistedCompany,HttpStatus.OK);
+    }
 }
