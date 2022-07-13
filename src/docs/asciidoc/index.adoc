@@ -1,0 +1,80 @@
+= Spring REST Docs for Tirage API
+
+[[APIS]]
+== API
+This is an example output for a service running at  https://tirages.herokuapp.com/tirage
+
+==== 1. Create tirage
+
+This endpoint allows a person or organisation to initialize a draw by providing the list of participant.
+It also let him choose whom can administration the draw
+
+.CreateTirage Request
+include::{snippets}/createTirage/http-request.adoc[]
+
+.CreateTirage Response
+include::{snippets}/createTirage/http-response.adoc[]
+
+.Description of createTirage response content
+//.CreateTirage Response description
+include::{snippets}/createTirage/response-fields.adoc[]
+
+
+==== 2. Perform tirage
+When Tirage is create, the endpoint help any participant to performe this tirage. The email and the secure code are mandatories
+You can contact admin the get your secureCode if you don't have it
+
+.performTirage Request
+include::{snippets}/doTirage/http-request.adoc[]
+
+.performTirage Response
+include::{snippets}/doTirage/http-response.adoc[]
+
+==== 3. Verify company
+
+Call this endpoint to check if a company with the given name already exist in database system
+
+.verifycompany Request
+include::{snippets}/verifyCompany/http-request.adoc[]
+
+.verifycompany Response
+include::{snippets}/verifyCompany/http-response.adoc[]
+
+.verifycompany parameter
+
+include::{snippets}/verifyCompany/path-parameters.adoc[]
+
+==== 4. Get results
+.getResults Request
+include::{snippets}/getResults/http-request.adoc[]
+
+.getResults Response
+include::{snippets}/getResults/http-response.adoc[]
+
+==== 5. Get user result
+.getResultUser Request
+include::{snippets}/getResultUser/http-request.adoc[]
+
+.getResultUser Response
+include::{snippets}/getResultUser/http-response.adoc[]
+
+==== 6. Get users
+.getUsers Request
+include::{snippets}/getUsers/http-request.adoc[]
+
+.getUsers Response
+include::{snippets}/getUsers/http-response.adoc[]
+
+==== 7. Get companies
+.getCompanies Request
+include::{snippets}/getCompanies/http-request.adoc[]
+
+.getCompanies Response
+include::{snippets}/getCompanies/http-response.adoc[]
+
+==== 8. Notify user
+.notifyUser Request
+include::{snippets}/notifyuser/http-request.adoc[]
+
+.notifyUser Response
+include::{snippets}/notifyuser/http-response.adoc[]

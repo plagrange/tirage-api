@@ -1,5 +1,6 @@
 package com.lagrange.tirage.tirageapi.services.interfaces;
 
+import com.lagrange.tirage.tirageapi.entity.Tirage;
 import com.lagrange.tirage.tirageapi.model.*;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface ITirageCoreService {
     NotifyUserResponse notifyUser(NotifyUserResource userResource) throws Exception;
     boolean verifyCompanyAlreadyExist(String company) throws Exception;
     List<String> getListExistedCompany() throws Exception;
+    Tirage verifyUserAlreadyDoTirage(String email, String company);
 }
