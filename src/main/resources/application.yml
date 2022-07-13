@@ -10,23 +10,19 @@ spring:
       idle-timeout: 60000
       leak-detection-threshold: 60000
       max-lifetime: 60000
-    password: sa
-    url: jdbc:h2:./data/tiragedb;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS LAGRANGE;MV_STORE=false
-    username: sa
-    platform: h2
-  h2:
-    console:
-      enabled: true
+    password: 288eb693bbb620f4059f9f75ab5b762366c2711777674ca04e39f37a3f53c715
+    url: postgres://fnuylavddgfdzq:288eb693bbb620f4059f9f75ab5b762366c2711777674ca04e39f37a3f53c715@ec2-99-80-170-190.eu-west-1.compute.amazonaws.com:5432/dbu4tmhk93f69
+    username: fnuylavddgfdzq
   jpa:
     generate-ddl: true
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        default_schema: LAGRANGE
-        dialect: org.hibernate.dialect.H2Dialect
+        default_schema: dbu4tmhk93f69
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         enable_lazy_load_no_trans: true
     show-sql: true
 
