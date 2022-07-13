@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    driverClassName: org.h2.Driver
+    driverClassName: org.postgresql.Driver
     hikari:
       connection-timeout: 60000
       idle-timeout: 60000
