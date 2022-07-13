@@ -13,7 +13,7 @@ import java.util.Date;
  *
  */
 @Entity
-@Table(name = "TBL_PARAMETER", schema = "dbu4tmhk93f69", uniqueConstraints = @UniqueConstraint(columnNames = { "COMPANY" }))
+@Table(name = "TBL_PARAMETER", uniqueConstraints = @UniqueConstraint(columnNames = { "COMPANY" }))
 @NoArgsConstructor
 @Builder
 @Data
