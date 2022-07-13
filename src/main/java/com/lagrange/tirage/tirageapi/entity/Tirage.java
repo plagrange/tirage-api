@@ -17,7 +17,7 @@ import java.util.Date;
  *
  */
 @Entity
-@Table(name = "TBL_TIRAGE", schema = "LAGRANGE")
+@Table(name = "TBL_TIRAGE", schema = "dbu4tmhk93f69")
 @Data
 @Builder
 @AllArgsConstructor
