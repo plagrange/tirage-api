@@ -14,10 +14,10 @@ import java.util.Optional;
 @Repository
 public interface TirageRepository extends CrudRepository<Tirage,Long> {
 
-    @Query(value = "SELECT * FROM LAGRANGE.TBL_TIRAGE WHERE EMAIL = ?1 and COMPANY = ?2 limit 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM TBL_TIRAGE WHERE EMAIL = ?1 and COMPANY = ?2 limit 1", nativeQuery = true)
     Optional<Tirage> getUserTirage(String email, String company) ;
 
-    @Query(value = "UPDATE LAGRANGE.TBL_TIRAGE SET NOTIFICATION_SEND = ?1 WHERE EMAIL = ?1 and COMPANY= ?2 ", nativeQuery = true)
+    @Query(value = "UPDATE TBL_TIRAGE SET NOTIFICATION_SEND = ?1 WHERE EMAIL = ?1 and COMPANY= ?2 ", nativeQuery = true)
     void updateUser(String email, String company, boolean notificationSend);
 
     @Query(value = "SELECT new com.lagrange.tirage.tirageapi.model.UserResource(t.email, t.secoreCode, t.admin) FROM Tirage t WHERE t.company = ?1")
@@ -26,9 +26,9 @@ public interface TirageRepository extends CrudRepository<Tirage,Long> {
     @Query(value = "SELECT new com.lagrange.tirage.tirageapi.model.UserTirageResponse(t.email, t.company, t.orderNumber) FROM Tirage t WHERE t.company = ?1")
     List<UserTirageResponse> getTirageResult(String company) ;
 
-    @Query(value = "DELETE FROM LAGRANGE.TBL_TIRAGE WHERE EMAIL = ?1", nativeQuery = true)
+    @Query(value = "DELETE FROM TBL_TIRAGE WHERE EMAIL = ?1", nativeQuery = true)
     public void delete(String email);
 
-    @Query(value = "DELETE FROM LAGRANGE.TBL_TIRAGE ", nativeQuery = true)
+    @Query(value = "DELETE FROM TBL_TIRAGE ", nativeQuery = true)
     public void deleteAll() ;
 }
