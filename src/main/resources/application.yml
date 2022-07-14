@@ -22,7 +22,7 @@ spring:
       ddl-auto: create
     properties:
       hibernate:
-        default_schema: dbu4tmhk93f69
+        #default_schema: dbu4tmhk93f69
         dialect: org.hibernate.dialect.PostgreSQLDialect
         enable_lazy_load_no_trans: true
     show-sql: true
