@@ -23,20 +23,9 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-#      - uses: matt-ball/newman-action@master
-      - name: Run Newman
-        uses: actions/checkout@v3
-        id: run-api-tests
-        with:
-          collection: "postman/tirage.postman_collection.json"
-          reporters: cli
-
   test-api-newman:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -62,7 +51,6 @@ jobs:
         run: |
           newman run postman/tirage.postman_collection.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
 
-
       # Upload the contents of Test Results directory to workspace
       - name: Output the run Details
         uses: actions/upload-artifact@v2
@@ -86,6 +74,7 @@ jobs:
   sonar:
     name: sonar build
     runs-on: ubuntu-latest
+    needs: jacoco-coverage
     steps:
       - uses: actions/checkout@v2
         with:
