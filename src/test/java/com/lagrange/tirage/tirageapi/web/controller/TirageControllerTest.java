@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(TirageController.class)
 @AutoConfigureRestDocs(outputDir = "target/generated-snippets")
-public class TirageControllerTest {
+    class TirageControllerTest {
 
     @MockBean
     private TirageCoreService tirageCoreService;
@@ -84,7 +84,7 @@ public class TirageControllerTest {
 
     @SneakyThrows
     @Test
-    public void testDotirage(){
+    void testDotirage(){
 
         //given
         UserTirageRequest userTirageRequest = UserTirageRequest.of("pmekeze@yahoo.fr", "TEST", "COMPANY");
@@ -105,7 +105,7 @@ public class TirageControllerTest {
 
     @SneakyThrows
     @Test
-    public void testGetResults(){
+    void testGetResults(){
         //given
         UserTirageRequest userTirageRequest = UserTirageRequest.of("admin@lagrangien.fr", "securecodeAdmin", "COMPANY");
 
@@ -129,7 +129,7 @@ public class TirageControllerTest {
 
     @SneakyThrows
     @Test
-    public void testGetResult(){
+    void testGetResult(){
         //given
         UserTirageRequest userTirageRequest = UserTirageRequest.of("test@lagrangien.fr", "TEST", "COMPANY");
         //when
@@ -148,7 +148,7 @@ public class TirageControllerTest {
 
     @SneakyThrows
     @Test
-    public void testGetUsers(){
+    void testGetUsers(){
         //given
         UserTirageRequest userTirageRequest = UserTirageRequest.of("admin@lagrangien.fr", "securecodeAdmin", "COMPANY");
 
@@ -171,7 +171,7 @@ public class TirageControllerTest {
 
     @SneakyThrows
     @Test
-    public void testNotifyUser(){
+    void testNotifyUser(){
 
         //given
         UserResource userResource = UserResource.builder().email("test@lagrangien.fr").secureCode("TEST").admin(true).build();
@@ -195,7 +195,7 @@ public class TirageControllerTest {
     }
 
     @Test
-    public void testVerifyCompany() throws Exception {
+    void testVerifyCompany() throws Exception {
 
         //when
         when(tirageCoreService.verifyCompanyAlreadyExist("company")).thenReturn(true);
@@ -209,7 +209,7 @@ public class TirageControllerTest {
     }
 
     @Test
-    public void testGetCompanies() throws Exception {
+    void testGetCompanies() throws Exception {
 
         //when
         when(tirageCoreService.getListExistedCompany()).thenReturn(Arrays.asList("TIRAGE1", "TIRAGE2"));
