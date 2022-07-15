@@ -17,7 +17,7 @@ import java.util.Date;
  *
  */
 @Entity
-@Table(name = "TBL_TIRAGE")
+@Table(name = "TBL_TIRAGE", uniqueConstraints = @UniqueConstraint(columnNames = { "COMPANY", "EMAIL" }))
 @Data
 @Builder
 @AllArgsConstructor

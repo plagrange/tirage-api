@@ -26,7 +26,7 @@ class TirageRepositoryTest {
     private TirageRepository tirageRepository;
 
 
-//    @Test
+    @Test
     void getUserTirageFound() {
 
         Optional<Tirage> optionalTirage = tirageRepository.getUserTirage("test1@lagrangien.fr", "TEST");
@@ -34,20 +34,20 @@ class TirageRepositoryTest {
         assertThat(optionalTirage.get().getEmail(), is("test1@lagrangien.fr"));
     }
 
-//    @Test
+    @Test
     void getUserTirageNotFound() {
 
         Optional<Tirage> optionalTirage = tirageRepository.getUserTirage("test3@lagrangien.fr", "TEST");
         assertThat(optionalTirage.isPresent(), is(false));
     }
 
-//    @Test
+    @Test
     void testGetAllUser(){
         List<UserResource> userResourceList = tirageRepository.getAllUser("TEST");
         assertThat(userResourceList.size(), is(2));
     }
 
-//    @Test
+    @Test
     void testGetTirageResult(){
 
         Optional<Tirage> tirageOptional = tirageRepository.getUserTirage("test1@lagrangien.fr", "TEST");

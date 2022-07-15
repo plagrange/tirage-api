@@ -1,0 +1,390 @@
+{
+	"info": {
+		"_postman_id": "8d5b6744-6389-49b5-8214-d11fa2489565",
+		"name": "tirage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8365564"
+	},
+	"item": [
+		{
+			"name": "create-tirage on heroku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"console.log(pm.response.json());",
+							"if(pm.response.status==201){",
+							"pm.test(\"Create tirage status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Create tirage test company name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.company).to.eql(\"TIRAGE\");",
+							"});",
+							"}else{",
+							"    pm.test(\"Perform tirage status code is 409\", function () {",
+							"    pm.response.to.have.status(409);",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"users\":[\n        {\n            \"email\":\"test1@lagrangien.fr\",\n             \"secureCode\":\"PAT\",\n             \"admin\":true\n        },\n        {\n             \"email\":\"test2@lagrangien.fr\",\n             \"secureCode\":\"LAGRANGE\",\n              \"admin\":true\n        }\n    ],\n    \"company\":\"TIRAGE\",\n    \"notificationEnabled\":false\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://tirages.herokuapp.com/tirage/create-tirage",
+					"protocol": "https",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"create-tirage"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		},
+		{
+			"name": "Do tirage 1 on heroku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Perform tirage status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Perform tirage verify first user email\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.eql(\"test1@lagrangien.fr\");",
+							"});",
+							"",
+							"pm.test(\"Perform tirage verify first user company\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.company).to.eql(\"TIRAGE\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"email\":\"test1@lagrangien.fr\",\n             \"secureCode\":\"PAT\",\n             \"company\":\"TIRAGE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://tirages.herokuapp.com/tirage/perform-tirage",
+					"protocol": "https",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"perform-tirage"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		},
+		{
+			"name": "Do tirage 2 on heraku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Perform tirage verifiy second user email\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.email).to.eql(\"test2@lagrangien.fr\");",
+							"});",
+							"",
+							"pm.test(\"Perform tirage verify second user company\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.company).to.eql(\"TIRAGE\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"email\":\"test2@lagrangien.fr\",\n             \"secureCode\":\"LAGRANGE\",\n             \"company\":\"TIRAGE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://tirages.herokuapp.com/tirage/perform-tirage",
+					"protocol": "http",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"perform-tirage"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		},
+		{
+			"name": "Get results on heroku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get all results status code is 200\", function () {",
+							"   pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Get results verify company\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.company).to.eql(\"TIRAGE\");",
+							"});",
+							"pm.test(\"Get results verify individual user data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.tirageResponseList[0].company).to.eql(\"TIRAGE\");",
+							"    pm.expect(jsonData.tirageResponseList[0].orderNumber).to.oneOf([1,2]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test1@lagrangien.fr\",\n    \"secureCode\": \"PAT\",\n    \"company\": \"TIRAGE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://tirages.herokuapp.com/tirage/results",
+					"protocol": "http",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"results"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		},
+		{
+			"name": "Getusers on heroku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get all users status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Verify company name for get users\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.company).to.eql(\"TIRAGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test1@lagrangien.fr\",\n    \"secureCode\": \"PAT\",\n    \"company\": \"TIRAGE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://tirages.herokuapp.com/tirage/getusers",
+					"protocol": "http",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"getusers"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		},
+		{
+			"name": "verifycompany on Heroku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify company already exist status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Verify company already value\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.companyExisted).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://tirages.herokuapp.com/tirage/verifycompany/TIRAGE",
+					"protocol": "https",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"verifycompany",
+						"TIRAGE"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		},
+		{
+			"name": "get existed companies on Heroku",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get all company name status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Get all company name should contains My company name\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"TIRAGE\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://tirages.herokuapp.com/tirage/companies",
+					"protocol": "https",
+					"host": [
+						"tirages",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"tirage",
+						"companies"
+					]
+				},
+				"description": "create tirage"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "variable_key",
+			"value": ""
+		}
+	]
+}
