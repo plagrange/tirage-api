@@ -58,19 +58,6 @@ jobs:
           name: RunReports
           path: testResults
 
-  jacoco-coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 16
-        uses: actions/setup-java@v3
-        with:
-          java-version: '16'
-          distribution: 'temurin'
-          cache: maven
-      - name: Run Jacoco plugin for sonar coverage
-        run: mvn sonar:sonar -Pcoverage --file pom.xml
-
   sonar:
     name: sonar build
     runs-on: ubuntu-latest
