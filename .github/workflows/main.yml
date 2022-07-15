@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run Newman
-        uses: ../postman
+        uses: postman
         id: run-api-tests
         with:
           collection: "tirage.postman_collection.json"
