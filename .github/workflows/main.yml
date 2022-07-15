@@ -27,9 +27,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: matt-ball/newman-action@master
       - name: Run Newman
-        uses: postman/
+        uses: actions/checkout@v3
         id: run-api-tests
         with:
-          collection: "tirage.postman_collection.json"
+          collection: "postman/tirage.postman_collection.json"
           reporters: cli
