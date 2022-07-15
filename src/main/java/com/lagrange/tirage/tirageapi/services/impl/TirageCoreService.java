@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,7 +32,9 @@ public class TirageCoreService implements ITirageCoreService {
     private TirageRepository tirageRepository;
     private ParameterRepository parameterRepository;
 
-    public TirageCoreService(TirageRepository tirageRepository, ParameterRepository parameterRepository) {
+    private Random rand = SecureRandom.getInstanceStrong();
+
+    public TirageCoreService(TirageRepository tirageRepository, ParameterRepository parameterRepository) throws NoSuchAlgorithmException {
         this.tirageRepository = tirageRepository;
         this.parameterRepository = parameterRepository;
     }
@@ -130,7 +134,6 @@ public class TirageCoreService implements ITirageCoreService {
             if (takenNumbers != null)
                 takenNumberList = Arrays.stream(takenNumbers.split(";")).collect(Collectors.toList());
 
-            Random rand = new Random();
             int numberTake = rand.nextInt(remainingNumberList.size());
             taken_number = Integer.valueOf(remainingNumberList.get(numberTake));
             remainingNumberList.remove(numberTake);

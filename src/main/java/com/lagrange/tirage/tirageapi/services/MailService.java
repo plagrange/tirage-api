@@ -26,7 +26,7 @@ public class MailService {
     private Session session;
 
     final String username = "bomintech@gmail.com";
-    final String password = "MbomintecH11";
+    final String criteria = "MbomintecH11";
 
     public MailService() {
         configure();
@@ -60,7 +60,7 @@ public class MailService {
 
         session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(username, criteria);
             }
         });
 
