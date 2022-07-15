@@ -14,6 +14,8 @@
 					"script": {
 						"exec": [
 							"console.log(pm.response.json());",
+							"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+							"tests[\"[INFO] Response: \" + JSON.stringify(pm.response)] = true;",
 							"if(pm.response.status==201){",
 							"pm.test(\"Create tirage status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -73,6 +75,8 @@
 					"script": {
 						"exec": [
 							"",
+							"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+							"tests[\"[INFO] Response: \" + JSON.stringify(pm.response)] = true;",
 							"pm.test(\"Perform tirage status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
@@ -129,6 +133,8 @@
 					"script": {
 						"exec": [
 							"",
+							"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+							"tests[\"[INFO] Response: \" + JSON.stringify(pm.response)] = true;",
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
@@ -184,6 +190,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+							"tests[\"[INFO] Response: \" + JSON.stringify(pm.response)] = true;",
 							"pm.test(\"Get all results status code is 200\", function () {",
 							"   pm.response.to.have.status(200);",
 							"});",
@@ -237,6 +245,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+							"tests[\"[INFO] Response: \" + JSON.stringify(pm.response)] = true;",
 							"pm.test(\"Get all users status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
