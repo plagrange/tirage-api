@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")
 @Builder
-public class TirageResponses implements Serializable{
+public class TirageResponses{
+	@Builder.Default
 	private List<UserTirageResponse> tirageResponseList = new ArrayList<UserTirageResponse>();
 	private String company;
 }

@@ -32,11 +32,12 @@ public class TirageCoreService implements ITirageCoreService {
     private TirageRepository tirageRepository;
     private ParameterRepository parameterRepository;
 
-    private Random rand = SecureRandom.getInstanceStrong();
+    private Random rand ;
 
     public TirageCoreService(TirageRepository tirageRepository, ParameterRepository parameterRepository) throws NoSuchAlgorithmException {
         this.tirageRepository = tirageRepository;
         this.parameterRepository = parameterRepository;
+        rand = SecureRandom.getInstanceStrong();
     }
 
     public List<UserResponse> initListParticipant(CreateTirageRequest createTirage) {
@@ -120,10 +121,13 @@ public class TirageCoreService implements ITirageCoreService {
 
     public int doTirage(String email, String company) {
         Tirage tirageUser = verifyUserAlreadyDoTirage(email, company);
-        if (tirageUser != null && tirageUser.getOrderNumber() != 0) {
+        if( tirageUser==null ){
+            return 0;
+        }
+        if ( tirageUser.getOrderNumber() != 0) {
             return tirageUser.getOrderNumber();
         }
-        Integer taken_number = 0;
+        Integer takenNumber = 0;
         TirageParameter parameter = null;
         Optional<TirageParameter> tirageParameterByCompany = parameterRepository.findTirageParameterByCompany(company);
         if (tirageParameterByCompany.isPresent()) {
@@ -138,9 +142,9 @@ public class TirageCoreService implements ITirageCoreService {
                 takenNumberList = Arrays.stream(takenNumbers.split(";")).collect(Collectors.toList());
 
             int numberTake = rand.nextInt(remainingNumberList.size());
-            taken_number = Integer.valueOf(remainingNumberList.get(numberTake));
+            takenNumber = Integer.valueOf(remainingNumberList.get(numberTake));
             remainingNumberList.remove(numberTake);
-            takenNumberList.add(String.valueOf(taken_number));
+            takenNumberList.add(String.valueOf(takenNumber));
 
             parameter.setRemainingNumbers(remainingNumberList.stream().collect(Collectors.joining(";")));
             parameter.setTakenNumbers(takenNumberList.stream().collect(Collectors.joining(";")));
@@ -149,7 +153,7 @@ public class TirageCoreService implements ITirageCoreService {
             parameterRepository.save(parameter);
 
             tirageUser.setEmail(email);
-            tirageUser.setOrderNumber(taken_number);
+            tirageUser.setOrderNumber(takenNumber);
             tirageUser.setCompany(company);
             tirageUser.setUpdateDate(new Date());
 
@@ -157,7 +161,7 @@ public class TirageCoreService implements ITirageCoreService {
         } else {
             //TODO, manage case tirage parameter not found
         }
-        return taken_number;
+        return takenNumber;
     }
 
     public boolean authenticateByDB(String email, String criteria, String company) {
@@ -203,15 +207,11 @@ public class TirageCoreService implements ITirageCoreService {
     }
 
     public List<UserTirageResponse> getResultList(String company) {
-
-        List<UserTirageResponse> result = null;
-        result = tirageRepository.getTirageResult(company);
-        Collections.sort(result, new Comparator<UserTirageResponse>() {
-            public int compare(UserTirageResponse result1, UserTirageResponse result2) {
-                Integer integer1 = result1.getOrderNumber();
-                Integer integer2 = result2.getOrderNumber();
-                return integer1.compareTo(integer2);
-            }
+        List<UserTirageResponse> result = tirageRepository.getTirageResult(company);
+        Collections.sort(result, (result1, result2) -> {
+            Integer integer1 = result1.getOrderNumber();
+            Integer integer2 = result2.getOrderNumber();
+            return integer1.compareTo(integer2);
         });
         return result;
     }

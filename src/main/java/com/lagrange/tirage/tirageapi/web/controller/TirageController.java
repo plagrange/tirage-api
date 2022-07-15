@@ -24,6 +24,9 @@ public class TirageController {
     @Autowired
     private ITirageCoreService tirageCoreService;
 
+    private static final String ANDCOMPANY = " and company : ";
+    private static final String RETRIEVE_RESULT = "Retrieving result of tirage for user : ";
+
     @SneakyThrows
     @PostMapping(value = "/create-tirage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateTirageResponse> createTirage(@RequestBody @Valid CreateTirageRequest createTirageRequest) {
@@ -46,7 +49,7 @@ public class TirageController {
 
     @PostMapping(value = "/perform-tirage", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserTirageResponse> doTirage(@RequestBody @Valid UserTirageRequest userTirageRequest) throws Exception {
-        log.info("Perform tirage for user : " + userTirageRequest.getEmail() + " and company : " + userTirageRequest.getCompany());
+        log.info("Perform tirage for user : " + userTirageRequest.getEmail() + ANDCOMPANY + userTirageRequest.getCompany());
         UserTirageResponse userTirageResponse = UserTirageResponse.builder().build();
 
         if (tirageCoreService.authenticateByDB(userTirageRequest.getEmail(), userTirageRequest.getSecureCode(), userTirageRequest.getCompany())) {
@@ -84,7 +87,7 @@ public class TirageController {
 
     @PostMapping(value = "/result", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserTirageResponse> getResultUser(@RequestBody @Valid UserTirageRequest userRequest) throws Exception {
-        log.info("retrieving result of tirage for user : " + userRequest.getEmail() + " and company : " + userRequest.getCompany());
+        log.info(RETRIEVE_RESULT + userRequest.getEmail() + ANDCOMPANY + userRequest.getCompany());
         if (tirageCoreService.authenticateByDB(userRequest.getEmail(), userRequest.getSecureCode(), userRequest.getCompany())) {
 
             Tirage tirage = tirageCoreService.verifyUserAlreadyDoTirage(userRequest.getEmail(), userRequest.getCompany());
@@ -94,11 +97,11 @@ public class TirageController {
                     .orderNumber(tirage==null?0:tirage.getOrderNumber())
                     .company(userRequest.getCompany())
                     .build();
-            log.info("retrieving result of tirage for user : " + userRequest.getCompany() + " and company : " + userRequest.getCompany() + " end with success. result is : " + userTirageResponse);
+            log.info(RETRIEVE_RESULT + userRequest.getCompany() + ANDCOMPANY + userRequest.getCompany() + " end with success. result is : " + userTirageResponse);
             return new ResponseEntity<>(userTirageResponse, HttpStatus.OK);
 
         } else {
-            log.info("retrieving result of tirage for user : " + userRequest.getEmail() + " and company : " + userRequest.getCompany() + " is forbiden due to bad criteria provided : " + userRequest.getSecureCode());
+            log.info(RETRIEVE_RESULT + userRequest.getEmail() + ANDCOMPANY + userRequest.getCompany() + " is forbiden due to bad criteria provided : " + userRequest.getSecureCode());
             throw new ResponseStatusException(
                     HttpStatus.UNAUTHORIZED, "secure code not matching");
         }
@@ -138,7 +141,7 @@ public class TirageController {
     }
 
     @GetMapping(value = "/verifycompany/{company}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity verifyCompany(@PathVariable("company") String company) throws Exception {
+    public ResponseEntity<CompanyExisted> verifyCompany(@PathVariable("company") String company) throws Exception {
         log.info("verifing if the company ' " + company + "' exist");
         boolean companyAlreadyExist = tirageCoreService.verifyCompanyAlreadyExist(company);
         CompanyExisted companyExisted = CompanyExisted.of(companyAlreadyExist);
@@ -147,7 +150,7 @@ public class TirageController {
     }
 
     @GetMapping(value = "/companies", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getCompanies() throws Exception {
+    public ResponseEntity<List<String>> getCompanies() throws Exception {
         log.info("enterring get list existed companies");
         List<String> listExistedCompany = tirageCoreService.getListExistedCompany();
         log.info("exiting get list existed companies");

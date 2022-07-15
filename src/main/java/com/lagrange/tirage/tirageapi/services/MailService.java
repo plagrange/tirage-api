@@ -25,8 +25,8 @@ public class MailService {
 
     private Session session;
 
-    static final String username = "bomintech@gmail.com";
-    static final String criteria = "MbomintecH11";
+    static final String USERNAME = "bomintech@gmail.com";
+    static final String CRITERIA = "MbomintecH11";
 
     public MailService() {
         configure();
@@ -45,12 +45,6 @@ public class MailService {
 
         // 1 -> Création de la session
         Properties properties = new Properties();
-        // properties.setProperty("mail.transport.protocol", "smtps");
-        // properties.setProperty("mail.smtp.host", "smtp.live.com");
-        // properties.setProperty("mail.smtp.port", "587");
-        // properties.setProperty("mail.smtp.auth", "true");
-        // properties.setProperty("mail.smtp.starttls.enable", "true");
-
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
@@ -59,8 +53,9 @@ public class MailService {
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
         session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, criteria);
+                return new PasswordAuthentication(USERNAME, CRITERIA);
             }
         });
 
@@ -77,16 +72,12 @@ public class MailService {
                 + company + "/" + to + " \nVotre code de sécurité pour le tirage est : " + criteria
                 + " \n Bonne Change et a bientot \n \n Dr Ing Col Cpt Lagrange";
 
-//        try {
             message.setText(texte);
-            message.setFrom(new InternetAddress(username));
+            message.setFrom(new InternetAddress(USERNAME));
             message.setSubject("Tirage au sort");
             message.addRecipients(Message.RecipientType.TO, to);
 
             try {
-                // transport = session.getTransport("smtps");
-                // transport.connect("tiragesausort@hotmail.com",
-                // "MbomintecH11");
                 transport = session.getTransport();
                 transport.connect();
                 transport.sendMessage(message, new Address[] { new InternetAddress(to) });
@@ -102,9 +93,5 @@ public class MailService {
                     log.warn("Was not able to notify user :" + to, e);
                 }
             }
-//        } catch (MessagingException e) {
-//            throw e;
-//        }
-
     }
 }
