@@ -20,8 +20,8 @@ import java.util.List;
 @AllArgsConstructor(staticName = "of")
 @Builder
 public class CreateTirageResponse {
-	
-	private List<UserResponse> userResponses = new ArrayList<UserResponse>();
+	@Builder.Default
+	private List<UserResponse> userResponses = new ArrayList<>();
 	private String company;
 	private String message;
 

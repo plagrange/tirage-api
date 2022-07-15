@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor(staticName = "of")
 @Builder
 public class UsersResponse{
-	
+	@Builder.Default
 	private List<UserResource> userResponseList = new ArrayList<>();
 	private String company;
 	private String message;

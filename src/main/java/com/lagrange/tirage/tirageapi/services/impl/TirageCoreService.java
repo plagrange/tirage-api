@@ -80,11 +80,11 @@ public class TirageCoreService implements ITirageCoreService {
     }
 
     public List<UserResponse> initTirage(String company, boolean notificationEnabled, List<String> admins) {
-        List<UserResponse> result = new ArrayList<UserResponse>();
+        List<UserResponse> result = new ArrayList<>();
 
         List<UserResource> allUser = tirageRepository.getAllUser(company);
 
-        if (allUser != null && allUser.size() != 0) {
+        if (allUser != null && !allUser.isEmpty()) {
             List<String> remainingNumbers;
             remainingNumbers = IntStream.rangeClosed(1, allUser.size()).mapToObj(String::valueOf).collect(Collectors.toList());
             TirageParameter tirageParams = TirageParameter.builder()
@@ -115,8 +115,7 @@ public class TirageCoreService implements ITirageCoreService {
     }
 
     public List<UserResource> getListParticipantFromDB(String company) {
-        List<UserResource> allUser = tirageRepository.getAllUser(company);
-        return allUser;
+        return tirageRepository.getAllUser(company);
     }
 
     public int doTirage(String email, String company) {
@@ -239,7 +238,7 @@ public class TirageCoreService implements ITirageCoreService {
     }
 
     private List<UserResponse> sendMailToUsers(List<UserResource> allUser, String company) {
-        List<UserResponse> resultList = new ArrayList<UserResponse>();
+        List<UserResponse> resultList = new ArrayList<>();
         MailService instance = MailService.getInstance();
         for (UserResource userResource : allUser) {
             if (userResource.getEmail().contains("@")) {

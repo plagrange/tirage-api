@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor(staticName = "of")
 @Builder
 public class CreateTirageRequest {
-
+    @Builder.Default
     private List<UserResource> users = new ArrayList<>();
     private String company;
     @Builder.Default
