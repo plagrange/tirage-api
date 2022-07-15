@@ -28,6 +28,7 @@
         <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.language>java</sonar.language>
         <sonar.organization>plagrange</sonar.organization>
+        <sonar.project>plagrange_tirage-api</sonar.project>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 
     </properties>
