@@ -66,10 +66,13 @@ public class TirageCoreService implements ITirageCoreService {
         if (createTirage.isNotificationEnabled()) {
             for (UserResponse userResponse : listUser) {
                 Optional<Tirage> userTirage = tirageRepository.getUserTirage(userResponse.getEmail(), createTirage.getCompany());
-                Tirage tirage = userTirage.get();
-                tirage.setNotify(userResponse.isNotificationSend());
-                tirage.setUpdateDate(new Date());
-                tirageRepository.save(tirage);
+                userTirage.ifPresent(tirage -> {
+                            tirage.setNotify(userResponse.isNotificationSend());
+                            tirage.setUpdateDate(new Date());
+                            tirageRepository.save(tirage);
+                        }
+                );
+
             }
         }
         return listUser;
@@ -231,7 +234,8 @@ public class TirageCoreService implements ITirageCoreService {
 
     public List<String> getListExistedCompany() {
         Optional<List<String>> optionalCompanies = parameterRepository.findCompanies();
-        return optionalCompanies.get();
+
+        return optionalCompanies.isPresent() ? optionalCompanies.get() : null;
     }
 
     private List<UserResponse> sendMailToUsers(List<UserResource> allUser, String company) {

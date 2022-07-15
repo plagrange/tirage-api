@@ -25,8 +25,8 @@ public class MailService {
 
     private Session session;
 
-    final String username = "bomintech@gmail.com";
-    final String criteria = "MbomintecH11";
+    static final String username = "bomintech@gmail.com";
+    static final String criteria = "MbomintecH11";
 
     public MailService() {
         configure();
