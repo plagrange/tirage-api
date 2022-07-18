@@ -216,9 +216,12 @@ public class TirageCoreService implements ITirageCoreService {
     }
 
     @Override
-    public Tirage getUserResult(String email, String company) {
+    public Tirage getUserResult(String email, String company) throws UserException {
         Optional<Tirage> userTirage = tirageRepository.getUserTirage(email, company);
-        return userTirage.get();
+        if(userTirage.isPresent()){
+            return userTirage.get();
+        }
+        throw new UserException(ErrorCodesEnum.PARTICIPANT_NOT_FOUND);
     }
 
     public boolean verifyUserAlreadyDoTirage(String email, String company) {

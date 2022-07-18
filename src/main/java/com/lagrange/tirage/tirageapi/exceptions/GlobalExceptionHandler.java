@@ -49,11 +49,19 @@ public class GlobalExceptionHandler {
     ErrorResponse resultNotFound(ResponseStatusException e) {
         return  ErrorResponse.of(e.getMessage());
     }
+
     @ExceptionHandler(JDBCException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     ErrorResponse manageDBException(JDBCException e) {
         return  ErrorResponse.of("Data base exception with message : " + e.getMessage());
+    }
+
+    @ExceptionHandler(UserException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    ErrorResponse manageUserException(UserException e) {
+        return  ErrorResponse.of("Got user exception Error code : '" + e.getErrorCode() + "' and ewith message : " + e.getMessage());
     }
 
 

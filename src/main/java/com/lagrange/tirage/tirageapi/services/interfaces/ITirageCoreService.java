@@ -14,7 +14,7 @@ public interface ITirageCoreService {
     int doTirage(String email, String company) throws UserException;
     boolean authenticateAdminByDB(String email, String criteria, String company) throws UserException;
     List<UserTirageResponse> getResultList(String company);
-    Tirage getUserResult(String email, String company);
+    Tirage getUserResult(String email, String company) throws UserException;
     List<UserResource> getListParticipantFromDB(String company);
     NotifyUserResponse notifyUser(NotifyUserResource userResource) throws MessagingException, UserException;
     boolean verifyCompanyAlreadyExist(String company);
