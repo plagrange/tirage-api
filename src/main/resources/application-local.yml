@@ -24,7 +24,7 @@ spring:
     properties:
       hibernate:
         #default_schema: dbu4tmhk93f69
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
         enable_lazy_load_no_trans: true
     show-sql: true
   h2:

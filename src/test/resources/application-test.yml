@@ -11,20 +11,16 @@ spring:
       leak-detection-threshold: 60000
       max-lifetime: 60000
     password: sa
-    #url: jdbc:postgresql://ec2-99-80-170-190.eu-west-1.compute.amazonaws.com:5432/dbu4tmhk93f69?user=fnuylavddgfdzq&password=288eb693bbb620f4059f9f75ab5b762366c2711777674ca04e39f37a3f53c715
-    url: jdbc:h2:mem:DAREDB;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE;MV_STORE=false
+    url: jdbc:h2:mem:TIRAGEDB;DB_CLOSE_DELAY=-1;
     username: sa
     platform: h2
   jpa:
     generate-ddl: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
-        #default_schema: dbu4tmhk93f69
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
         enable_lazy_load_no_trans: true
     show-sql: true
   h2:
