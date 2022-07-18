@@ -51,6 +51,7 @@ public class MailService {
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.ssl.checkserveridentity", true);
 
         session = Session.getInstance(properties, new javax.mail.Authenticator() {
             @Override
