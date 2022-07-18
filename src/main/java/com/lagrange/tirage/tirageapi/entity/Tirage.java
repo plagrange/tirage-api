@@ -10,11 +10,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
-
-/**
- * @author pmekeze
- *
- */
 @Entity
 @Table(name = "TBL_TIRAGE", uniqueConstraints = @UniqueConstraint(columnNames = { "COMPANY", "EMAIL" }))
 @Data

@@ -8,10 +8,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * @author pmekeze
- *
- */
 @Entity
 @Table(name = "TBL_PARAMETER", uniqueConstraints = @UniqueConstraint(columnNames = { "COMPANY" }))
 @NoArgsConstructor
