@@ -1,6 +1,8 @@
 package com.lagrange.tirage.tirageapi.web.controller;
 
 import com.lagrange.tirage.tirageapi.entity.Tirage;
+import com.lagrange.tirage.tirageapi.exceptions.ErrorCodesEnum;
+import com.lagrange.tirage.tirageapi.exceptions.UserException;
 import com.lagrange.tirage.tirageapi.model.*;
 import com.lagrange.tirage.tirageapi.services.interfaces.ITirageCoreService;
 import lombok.SneakyThrows;
@@ -89,17 +91,18 @@ public class TirageController {
     public ResponseEntity<UserTirageResponse> getResultUser(@RequestBody @Valid UserTirageRequest userRequest) throws Exception {
         log.info(RETRIEVE_RESULT + userRequest.getEmail() + ANDCOMPANY + userRequest.getCompany());
         if (tirageCoreService.authenticateByDB(userRequest.getEmail(), userRequest.getSecureCode(), userRequest.getCompany())) {
-
-            Tirage tirage = tirageCoreService.verifyUserAlreadyDoTirage(userRequest.getEmail(), userRequest.getCompany());
-
-            UserTirageResponse userTirageResponse = UserTirageResponse.builder()
-                    .email(userRequest.getEmail())
-                    .orderNumber(tirage==null?0:tirage.getOrderNumber())
-                    .company(userRequest.getCompany())
-                    .build();
-            log.info(RETRIEVE_RESULT + userRequest.getCompany() + ANDCOMPANY + userRequest.getCompany() + " end with success. result is : " + userTirageResponse);
-            return new ResponseEntity<>(userTirageResponse, HttpStatus.OK);
-
+            Tirage userResult = tirageCoreService.getUserResult(userRequest.getEmail(), userRequest.getCompany());
+            if(userResult!=null) {
+                UserTirageResponse userTirageResponse = UserTirageResponse.builder()
+                        .email(userRequest.getEmail())
+                        .orderNumber(userResult.getOrderNumber())
+                        .company(userRequest.getCompany())
+                        .build();
+                log.info(RETRIEVE_RESULT + userRequest.getCompany() + ANDCOMPANY + userRequest.getCompany() + " end with success. result is : " + userTirageResponse);
+                return new ResponseEntity<>(userTirageResponse, HttpStatus.OK);
+            }else{
+                throw new UserException(ErrorCodesEnum.PARTICIPANT_NOT_FOUND);
+            }
         } else {
             log.info(RETRIEVE_RESULT + userRequest.getEmail() + ANDCOMPANY + userRequest.getCompany() + " is forbiden due to bad criteria provided : " + userRequest.getSecureCode());
             throw new ResponseStatusException(

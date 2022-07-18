@@ -5,11 +5,12 @@ package com.lagrange.tirage.tirageapi.services.impl;
 
 /**
  * @author pmekeze
- *
  */
 
 import com.lagrange.tirage.tirageapi.entity.Tirage;
 import com.lagrange.tirage.tirageapi.entity.TirageParameter;
+import com.lagrange.tirage.tirageapi.exceptions.ErrorCodesEnum;
+import com.lagrange.tirage.tirageapi.exceptions.UserException;
 import com.lagrange.tirage.tirageapi.model.*;
 import com.lagrange.tirage.tirageapi.persistence.ParameterRepository;
 import com.lagrange.tirage.tirageapi.persistence.TirageRepository;
@@ -22,6 +23,7 @@ import javax.mail.MessagingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,7 +34,7 @@ public class TirageCoreService implements ITirageCoreService {
     private TirageRepository tirageRepository;
     private ParameterRepository parameterRepository;
 
-    private Random rand ;
+    private Random rand;
 
     public TirageCoreService(TirageRepository tirageRepository, ParameterRepository parameterRepository) throws NoSuchAlgorithmException {
         this.tirageRepository = tirageRepository;
@@ -118,20 +120,22 @@ public class TirageCoreService implements ITirageCoreService {
         return tirageRepository.getAllUser(company);
     }
 
-    public int doTirage(String email, String company) {
-        Tirage tirageUser = verifyUserAlreadyDoTirage(email, company);
-        if( tirageUser==null ){
-            return 0;
+    public int doTirage(String email, String company) throws UserException {
+
+        Optional<Tirage> userTirage = tirageRepository.getUserTirage(email, company);
+        if (userTirage.isEmpty()) {
+            throw new UserException(ErrorCodesEnum.PARTICIPANT_NOT_FOUND);
         }
-        if ( tirageUser.getOrderNumber() != 0) {
+
+        Tirage tirageUser = userTirage.get();
+        if (tirageUser.getOrderNumber() != 0) {
             return tirageUser.getOrderNumber();
         }
-        Integer takenNumber = 0;
-        TirageParameter parameter = null;
+
         Optional<TirageParameter> tirageParameterByCompany = parameterRepository.findTirageParameterByCompany(company);
         if (tirageParameterByCompany.isPresent()) {
 
-            parameter = tirageParameterByCompany.get();
+            TirageParameter parameter = tirageParameterByCompany.get();
             String remainingNumbers = parameter.getRemainingNumbers();
             List<String> remainingNumberList = Arrays.stream(remainingNumbers.split(";")).collect(Collectors.toList());
 
@@ -141,7 +145,7 @@ public class TirageCoreService implements ITirageCoreService {
                 takenNumberList = Arrays.stream(takenNumbers.split(";")).collect(Collectors.toList());
 
             int numberTake = rand.nextInt(remainingNumberList.size());
-            takenNumber = Integer.valueOf(remainingNumberList.get(numberTake));
+            Integer takenNumber = Integer.valueOf(remainingNumberList.get(numberTake));
             remainingNumberList.remove(numberTake);
             takenNumberList.add(String.valueOf(takenNumber));
 
@@ -157,10 +161,11 @@ public class TirageCoreService implements ITirageCoreService {
             tirageUser.setUpdateDate(new Date());
 
             tirageRepository.save(tirageUser);
+
+            return takenNumber;
         } else {
-            //TODO, manage case tirage parameter not found
+            throw new UserException(ErrorCodesEnum.COMPANY_NOT_FOUND);
         }
-        return takenNumber;
     }
 
     public boolean authenticateByDB(String email, String criteria, String company) {
@@ -173,36 +178,31 @@ public class TirageCoreService implements ITirageCoreService {
         return autenticate;
     }
 
-    public boolean authenticateAdminByDB(String email, String criteria, String company) {
-        boolean autenticate = false;
-        TirageParameter tirageParameter = null;
+    public boolean authenticateAdminByDB(String email, String criteria, String company) throws UserException {
+        AtomicBoolean autenticate = new AtomicBoolean(false);
         Optional<TirageParameter> tirageParameterByCompany = parameterRepository.findTirageParameterByCompany(company);
-        if (tirageParameterByCompany.isPresent())
-            tirageParameter = tirageParameterByCompany.get();
-        else {
-            //TODO, namage case tirage parameter not found
-        }
-        if (tirageParameter != null) {
-            String admins = tirageParameter.getAdminList();
-            List<String> adminList = Arrays.stream(admins.split(";")).toList();
-            for (String admin : adminList) {
-                Optional<Tirage> userTirageOptional = tirageRepository.getUserTirage(admin, company);
-                if (userTirageOptional.isPresent()) {
-                    Tirage userTirage = userTirageOptional.get();
-                    if (userTirage.getEmail().equals(email)) {
-                        if (userTirage.getSecoreCode().equals(criteria)) {
-                            autenticate = true;
-                        } else {
-                            log.warn("bad admin password provided: provide = " + criteria + " and expected = " + userTirage.getSecoreCode());
-                        }
-                    }
-                } else {
-                    //TODO, namage case tirage parameter not found
-                }
-            }
+        if (tirageParameterByCompany.isEmpty()) {
+            throw new UserException(ErrorCodesEnum.PARTICIPANT_NOT_FOUND);
         }
 
-        return autenticate;
+        TirageParameter tirageParameter = tirageParameterByCompany.get();
+
+        String admins = tirageParameter.getAdminList();
+        List<String> adminList = Arrays.stream(admins.split(";")).toList();
+
+        for (String admin : adminList) {
+            Optional<Tirage> userTirageOptional = tirageRepository.getUserTirage(admin, company);
+            userTirageOptional.ifPresent(userTirage -> {
+                if (userTirage.getEmail().equals(email)) {
+                    if (userTirage.getSecoreCode().equals(criteria)) {
+                        autenticate.set(true);
+                    } else {
+                        log.warn("bad admin password provided: provide = " + criteria + " and expected = " + userTirage.getSecoreCode());
+                    }
+                }
+            });
+        }
+        return autenticate.get();
     }
 
     public List<UserTirageResponse> getResultList(String company) {
@@ -215,15 +215,15 @@ public class TirageCoreService implements ITirageCoreService {
         return result;
     }
 
-    public Tirage verifyUserAlreadyDoTirage(String email, String company) {
-        Tirage tirage = null;
+    @Override
+    public Tirage getUserResult(String email, String company) {
         Optional<Tirage> userTirage = tirageRepository.getUserTirage(email, company);
-        if (userTirage.isPresent()) {
-            tirage = userTirage.get();
-        } else {
-            //TODO, namage case tirage parameter not found
-        }
-        return tirage;
+        return userTirage.get();
+    }
+
+    public boolean verifyUserAlreadyDoTirage(String email, String company) {
+        Optional<Tirage> userTirage = tirageRepository.getUserTirage(email, company);
+        return userTirage.isPresent() && userTirage.get().getOrderNumber() != 0;
     }
 
     public boolean verifyCompanyAlreadyExist(String company) {
@@ -234,7 +234,7 @@ public class TirageCoreService implements ITirageCoreService {
     public List<String> getListExistedCompany() {
         Optional<List<String>> optionalCompanies = parameterRepository.findCompanies();
 
-        return optionalCompanies.isPresent() ? optionalCompanies.get() : null;
+        return optionalCompanies.orElse(Collections.emptyList());
     }
 
     private List<UserResponse> sendMailToUsers(List<UserResource> allUser, String company) {
@@ -271,19 +271,15 @@ public class TirageCoreService implements ITirageCoreService {
         return resultList;
     }
 
-    public NotifyUserResponse notifyUser(NotifyUserResource userResource) throws MessagingException {
-
-        NotifyUserResponse notifyUserResponse = null;
+    public NotifyUserResponse notifyUser(NotifyUserResource userResource) throws MessagingException, UserException {
         MailService instance = MailService.getInstance();
         Optional<Tirage> userTirage = tirageRepository.getUserTirage(userResource.getUserToNotify().getEmail(), userResource.getCompany());
         if (userTirage.isPresent()) {
             Tirage tirage = userTirage.get();
             instance.sendMail(tirage.getEmail(), tirage.getCompany(), tirage.getSecoreCode());
-            notifyUserResponse = NotifyUserResponse.of(userResource.getUserToNotify().getEmail(), userResource.getCompany(), true);
+            return NotifyUserResponse.of(userResource.getUserToNotify().getEmail(), userResource.getCompany(), true);
         } else {
-            //TODO Manage here case user not found on database
+            throw new UserException(ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED);
         }
-
-        return notifyUserResponse;
     }
 }
