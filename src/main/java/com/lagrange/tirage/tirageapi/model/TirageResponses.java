@@ -21,6 +21,6 @@ import java.util.List;
 @Builder
 public class TirageResponses{
 	@Builder.Default
-	private List<UserTirageResponse> tirageResponseList = new ArrayList<UserTirageResponse>();
+	private List<UserTirageResponse> tirageResponseList = new ArrayList<>();
 	private String company;
 }

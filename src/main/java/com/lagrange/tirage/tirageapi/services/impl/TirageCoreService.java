@@ -86,7 +86,7 @@ public class TirageCoreService implements ITirageCoreService {
 
         if (allUser != null && !allUser.isEmpty()) {
             List<String> remainingNumbers;
-            remainingNumbers = IntStream.rangeClosed(1, allUser.size()).mapToObj(String::valueOf).collect(Collectors.toList());
+            remainingNumbers = IntStream.rangeClosed(1, allUser.size()).mapToObj(String::valueOf).toList();
             TirageParameter tirageParams = TirageParameter.builder()
                     .nbParticipant(allUser.size())
                     .remainingNumbers(remainingNumbers.stream().collect(Collectors.joining(";")))
@@ -184,7 +184,7 @@ public class TirageCoreService implements ITirageCoreService {
         }
         if (tirageParameter != null) {
             String admins = tirageParameter.getAdminList();
-            List<String> adminList = Arrays.stream(admins.split(";")).collect(Collectors.toList());
+            List<String> adminList = Arrays.stream(admins.split(";")).toList();
             for (String admin : adminList) {
                 Optional<Tirage> userTirageOptional = tirageRepository.getUserTirage(admin, company);
                 if (userTirageOptional.isPresent()) {
