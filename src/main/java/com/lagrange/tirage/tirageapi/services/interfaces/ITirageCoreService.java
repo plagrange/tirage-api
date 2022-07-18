@@ -1,7 +1,6 @@
 package com.lagrange.tirage.tirageapi.services.interfaces;
 
 import com.lagrange.tirage.tirageapi.entity.Tirage;
-import com.lagrange.tirage.tirageapi.exceptions.SendMessageException;
 import com.lagrange.tirage.tirageapi.model.*;
 
 import javax.mail.MessagingException;
