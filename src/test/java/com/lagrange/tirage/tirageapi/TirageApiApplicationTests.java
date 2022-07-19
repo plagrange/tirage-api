@@ -15,7 +15,7 @@ class TirageApiApplicationTests {
 	@Test
 	void contextLoads() {
 		Assertions.assertTrue(true);
-		System.out.printf("dll = " + dll);
+		System.out.printf("dll value = " + dll);
 	}
 
 }
