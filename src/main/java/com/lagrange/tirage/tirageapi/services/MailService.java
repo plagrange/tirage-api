@@ -98,7 +98,6 @@ public class MailService {
                     }
                 } catch (MessagingException e) {
                     log.warn("Was not able to notify user :" + to, e);
-                    throw  new UserException(ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED);
                 }
             }
     }
