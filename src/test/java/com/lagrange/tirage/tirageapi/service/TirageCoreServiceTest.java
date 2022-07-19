@@ -41,6 +41,7 @@ public class TirageCoreServiceTest {
     private UserResource userResource3;
     private List<UserResource> userResourceList;
     private static String COMPANY = "COMPANY";
+
     @BeforeEach
     public void setUp() {
         tirageRepository.deleteAll();

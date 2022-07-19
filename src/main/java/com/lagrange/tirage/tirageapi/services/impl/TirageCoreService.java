@@ -248,7 +248,7 @@ public class TirageCoreService implements ITirageCoreService {
                             .isNotificationSend(true)
                             .build();
                     resultList.add(userResponse);
-                } catch (MessagingException e) {
+                } catch (UserException e) {
                     UserResponse userResponse = UserResponse.builder()
                             .email(userResource.getEmail())
                             .secureCode(userResource.getSecureCode())
