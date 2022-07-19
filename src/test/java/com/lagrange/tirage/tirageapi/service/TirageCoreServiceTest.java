@@ -103,6 +103,48 @@ class TirageCoreServiceTest {
         Assertions.assertFalse(company, "User authentication test should failed because user not exist");
     }
 
+
+    @Test
+    @SneakyThrows
+    void testAuthenticateAdminByDBSucceed(){
+
+        CreateTirageRequest createTirageRequest = CreateTirageRequest.of(userResourceList, COMPANY, false);
+
+        tirageCoreService.initListParticipant(createTirageRequest);
+
+        boolean authenticateAdminByDB = tirageCoreService.authenticateAdminByDB(userResource1.getEmail(), userResource1.getSecureCode(), COMPANY);
+
+        Assertions.assertTrue(authenticateAdminByDB);
+    }
+
+    @Test
+    @SneakyThrows
+    void testAuthenticateAdminByDBFailedBadCode(){
+
+        CreateTirageRequest createTirageRequest = CreateTirageRequest.of(userResourceList, COMPANY, false);
+
+        tirageCoreService.initListParticipant(createTirageRequest);
+
+        boolean authenticateAdminByDB = tirageCoreService.authenticateAdminByDB(userResource1.getEmail(), "userResource1.getSecureCode()", COMPANY);
+
+        Assertions.assertFalse(authenticateAdminByDB);
+    }
+
+    @Test
+    @SneakyThrows
+    void testAuthenticateAdminByDBFailedCompanyNotFound(){
+
+        CreateTirageRequest createTirageRequest = CreateTirageRequest.of(userResourceList, COMPANY, false);
+
+        tirageCoreService.initListParticipant(createTirageRequest);
+
+        UserException userException = Assertions.assertThrows(UserException.class, () ->{
+            tirageCoreService.authenticateAdminByDB(userResource1.getEmail(), "userResource1.getSecureCode()", "COMPANY2");
+        });
+
+        Assertions.assertEquals(ErrorCodesEnum.COMPANY_NOT_FOUND.name(), userException.getErrorCode());
+    }
+
     @Test
     @SneakyThrows
     void testDotirageSucceed(){

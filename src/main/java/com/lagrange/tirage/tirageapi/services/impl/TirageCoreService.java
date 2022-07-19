@@ -182,7 +182,7 @@ public class TirageCoreService implements ITirageCoreService {
         AtomicBoolean autenticate = new AtomicBoolean(false);
         Optional<TirageParameter> tirageParameterByCompany = parameterRepository.findTirageParameterByCompany(company);
         if (tirageParameterByCompany.isEmpty()) {
-            throw new UserException(ErrorCodesEnum.PARTICIPANT_NOT_FOUND);
+            throw new UserException(ErrorCodesEnum.COMPANY_NOT_FOUND);
         }
 
         TirageParameter tirageParameter = tirageParameterByCompany.get();
