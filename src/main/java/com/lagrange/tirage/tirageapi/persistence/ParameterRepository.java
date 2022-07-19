@@ -24,7 +24,6 @@ public interface ParameterRepository extends CrudRepository<TirageParameter,Long
     @Query(value = "DELETE FROM TBL_PARAMETER WHERE COMPANY= ?1", nativeQuery = true)
     void deleteByCompany(String company);
 
-    @Query(value = "DELETE FROM TBL_PARAMETER ", nativeQuery = true)
-    public void deleteAll() ;
+    void deleteAll() ;
 
 }

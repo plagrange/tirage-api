@@ -134,7 +134,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         UserTirageRequest userTirageRequest = UserTirageRequest.of("test@lagrangien.fr", "TEST", "COMPANY");
         //when
         when(tirageCoreService.authenticateByDB(userTirageRequest.getEmail(), userTirageRequest.getSecureCode(),userTirageRequest.getCompany())).thenReturn(true);
-        when(tirageCoreService.verifyUserAlreadyDoTirage("test@lagrangien.fr", "COMPANY")).thenReturn(true);
         when(tirageCoreService.getUserResult("test@lagrangien.fr", "COMPANY")).thenReturn(Tirage.builder().build());
 
         //then

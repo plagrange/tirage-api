@@ -27,8 +27,7 @@ public interface TirageRepository extends CrudRepository<Tirage,Long> {
     List<UserTirageResponse> getTirageResult(String company) ;
 
     @Query(value = "DELETE FROM TBL_TIRAGE WHERE EMAIL = ?1", nativeQuery = true)
-    public void delete(String email);
+    void delete(String email);
 
-    @Query(value = "DELETE FROM TBL_TIRAGE ", nativeQuery = true)
-    public void deleteAll() ;
+    void deleteAll() ;
 }

@@ -224,11 +224,6 @@ public class TirageCoreService implements ITirageCoreService {
         throw new UserException(ErrorCodesEnum.PARTICIPANT_NOT_FOUND);
     }
 
-    public boolean verifyUserAlreadyDoTirage(String email, String company) {
-        Optional<Tirage> userTirage = tirageRepository.getUserTirage(email, company);
-        return userTirage.isPresent() && userTirage.get().getOrderNumber() != 0;
-    }
-
     public boolean verifyCompanyAlreadyExist(String company) {
         Optional<TirageParameter> tirageParameterByCompany = parameterRepository.findTirageParameterByCompany(company);
         return tirageParameterByCompany.isPresent();

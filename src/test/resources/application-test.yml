@@ -15,7 +15,8 @@ spring:
     username: sa
     platform: h2
   jpa:
-    generate-ddl: true
+    generate-ddl: false
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:
@@ -28,7 +29,7 @@ spring:
 logging:
   level:
     org:
-      springframework: INFO
+      springframework: debug
 
 management:
   health:

@@ -19,5 +19,4 @@ public interface ITirageCoreService {
     NotifyUserResponse notifyUser(NotifyUserResource userResource) throws MessagingException, UserException;
     boolean verifyCompanyAlreadyExist(String company);
     List<String> getListExistedCompany();
-    boolean verifyUserAlreadyDoTirage(String email, String company);
 }
