@@ -23,7 +23,7 @@ import static org.mockito.Mockito.doNothing;
 
 @SpringBootTest
 @ActiveProfiles({"test"})
-public class TirageCoreServiceTest {
+class TirageCoreServiceTest {
 
     @Autowired
     private ITirageCoreService tirageCoreService;
@@ -63,7 +63,7 @@ public class TirageCoreServiceTest {
         List<UserResponse> userResponses = tirageCoreService.initListParticipant(createTirageRequest);
 
         System.out.println(userResponses);
-        Assertions.assertTrue(userResponses.size()==2);
+        Assertions.assertEquals(2, userResponses.size());
 
     }
 
@@ -112,7 +112,7 @@ public class TirageCoreServiceTest {
 
         int doTirageResult = tirageCoreService.doTirage(userResource1.getEmail(), COMPANY);
 
-        Assertions.assertTrue(doTirageResult!=0, "Tirage result should be succeed");
+        Assertions.assertNotEquals(0, doTirageResult, "Tirage result should be succeed");
 
     }
 
@@ -128,7 +128,7 @@ public class TirageCoreServiceTest {
             tirageCoreService.doTirage(userResource1.getEmail(), "COMPANY");
         });
 
-        Assertions.assertTrue(exception.getErrorCode().equals(ErrorCodesEnum.COMPANY_NOT_FOUND.name()), "Tirage result should throws and user exception with COMPANY_NOT_FOUND_CODE");
+        Assertions.assertEquals(exception.getErrorCode(), ErrorCodesEnum.COMPANY_NOT_FOUND.name(), "Tirage result should throws and user exception with COMPANY_NOT_FOUND_CODE");
 
     }
 
@@ -142,7 +142,7 @@ public class TirageCoreServiceTest {
         int doTirageResult = tirageCoreService.doTirage(userResource1.getEmail(), COMPANY);
         int doTirageResult2 = tirageCoreService.doTirage(userResource1.getEmail(), COMPANY);
 
-        Assertions.assertTrue(doTirageResult==doTirageResult2, "Tirage already done and should return same result");
+        Assertions.assertEquals(doTirageResult, doTirageResult2, "Tirage already done and should return same result");
 
     }
 
@@ -158,7 +158,7 @@ public class TirageCoreServiceTest {
             tirageCoreService.doTirage("test3@lagrangien.fr", COMPANY);
         });
 
-        Assertions.assertTrue(exception.getErrorCode().equals(ErrorCodesEnum.PARTICIPANT_NOT_FOUND.name()), "Tirage result should throws and user exception");
+        Assertions.assertEquals(exception.getErrorCode(), ErrorCodesEnum.PARTICIPANT_NOT_FOUND.name(), "Tirage result should throws and user exception");
 
     }
 
@@ -174,7 +174,7 @@ public class TirageCoreServiceTest {
 
         List<UserTirageResponse> resultList = tirageCoreService.getResultList(COMPANY);
 
-        Assertions.assertTrue(resultList.size()==2);
+        Assertions.assertEquals(2, resultList.size());
     }
 
     @Test
@@ -186,7 +186,7 @@ public class TirageCoreServiceTest {
         tirageCoreService.doTirage(userResource1.getEmail(), COMPANY);
 
         Tirage userResult = tirageCoreService.getUserResult(userResource1.getEmail(), COMPANY);
-        Assertions.assertTrue(userResult.getOrderNumber()!=0);
+        Assertions.assertNotEquals(0, userResult.getOrderNumber());
     }
 
     @Test
@@ -200,7 +200,7 @@ public class TirageCoreServiceTest {
         UserException exception = Assertions.assertThrows(UserException.class, () -> {
             tirageCoreService.getUserResult("test3@lagrangien.fr", userResource1.getSecureCode());
         });
-        Assertions.assertTrue(exception.getErrorCode().equals(ErrorCodesEnum.PARTICIPANT_NOT_FOUND.name()), "Tirage result should throws and user exception");
+        Assertions.assertEquals(exception.getErrorCode(), ErrorCodesEnum.PARTICIPANT_NOT_FOUND.name(), "Tirage result should throws and user exception");
 
     }
 
@@ -254,18 +254,17 @@ public class TirageCoreServiceTest {
         List<String> listExistedCompany = tirageCoreService.getListExistedCompany();
 
         Assertions.assertTrue(listExistedCompany.contains(COMPANY));
-        Assertions.assertTrue(listExistedCompany.size()==1);
+        Assertions.assertEquals(1, listExistedCompany.size());
 
     }
 
     @Test
     @SneakyThrows
     void testGetListExistedCompanyShouldBeEmpty(){
-        CreateTirageRequest createTirageRequest = CreateTirageRequest.of(userResourceList, COMPANY, false);
 
         List<String> listExistedCompany = tirageCoreService.getListExistedCompany();
 
-        Assertions.assertTrue(listExistedCompany.size()==0);
+        Assertions.assertEquals(0, listExistedCompany.size());
 
     }
 
@@ -282,10 +281,10 @@ public class TirageCoreServiceTest {
         doNothing().when(mailService).sendMail(notifyUserResource.getUserToNotify().getEmail(), notifyUserResource.getCompany(), notifyUserResource.getUserToNotify().getSecureCode());
 
         UserException userException = Assertions.assertThrows(UserException.class, () -> {
-            NotifyUserResponse notifyUserResponse = tirageCoreService.notifyUser(notifyUserResource);
+            tirageCoreService.notifyUser(notifyUserResource);
         });
 
-        Assertions.assertTrue(userException.getErrorCode().equals(ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name()));
+        Assertions.assertEquals(userException.getErrorCode(),ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name());
     }
 
     @Test
@@ -303,6 +302,6 @@ public class TirageCoreServiceTest {
             tirageCoreService.notifyUser(notifyUserResource);
         });
 
-        Assertions.assertTrue(userException.getErrorCode().equals(ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name()));
+        Assertions.assertEquals(userException.getErrorCode(), ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name());
     }
 }

@@ -16,7 +16,7 @@ import javax.mail.Transport;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class MailServiceTest {
+class MailServiceTest {
 
     @Autowired
     private MailService mailService;
@@ -38,7 +38,7 @@ public class MailServiceTest {
             mailService.sendMail("test1@lagrangien.fr", "COMPANY", "TEST1");
         });
 
-        Assertions.assertTrue(userException.getErrorCode().equals(ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name()));
+        Assertions.assertEquals(userException.getErrorCode(), ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name());
 
     }
 
