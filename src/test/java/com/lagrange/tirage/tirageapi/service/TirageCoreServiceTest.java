@@ -281,9 +281,11 @@ public class TirageCoreServiceTest {
 
         doNothing().when(mailService).sendMail(notifyUserResource.getUserToNotify().getEmail(), notifyUserResource.getCompany(), notifyUserResource.getUserToNotify().getSecureCode());
 
-        NotifyUserResponse notifyUserResponse = tirageCoreService.notifyUser(notifyUserResource);
+        UserException userException = Assertions.assertThrows(UserException.class, () -> {
+            NotifyUserResponse notifyUserResponse = tirageCoreService.notifyUser(notifyUserResource);
+        });
 
-        Assertions.assertTrue(notifyUserResponse.isNotificationSend());
+        Assertions.assertTrue(userException.getErrorCode().equals(ErrorCodesEnum.NOTIFY_PARTICIPANT_FAILED.name()));
     }
 
     @Test
